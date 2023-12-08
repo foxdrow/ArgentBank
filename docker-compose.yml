@@ -1,0 +1,20 @@
+version: "2.4"
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    command: bash -c "npm install && npm i nodemon -g && npm run dev:server && npm run populate-db"
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=mongodb://mongodb:27017/argentBankDB
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
