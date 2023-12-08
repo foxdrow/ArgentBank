@@ -1,0 +1,8 @@
+// body must take all the height of the viewport
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
