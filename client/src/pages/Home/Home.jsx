@@ -1,4 +1,4 @@
-import MainContainer from "../layouts/MainContainer";
+import MainContainer from "../../layouts/MainContainer/MainContainer";
 
 const Home = () => {
   return (

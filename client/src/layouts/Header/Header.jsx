@@ -1,12 +1,13 @@
 import { NavLink } from "react-router-dom";
 import {useSelector} from "react-redux";
+import "./Header.scss";
 
 const Header = (props) => {
   const userId = useSelector((state) => state.user.id);
   return (
     <header>
       {userId}
-      <nav>
+      <nav className="main_nav">
         <NavLink
           to="/"
           exact="true"

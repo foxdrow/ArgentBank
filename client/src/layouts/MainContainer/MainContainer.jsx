@@ -1,5 +1,6 @@
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import "./MainContainer.scss";
 const MainContainer = (props) => {
   const { children, className } = props;
   return (
