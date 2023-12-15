@@ -13,7 +13,7 @@ const Header = (props) => {
         <NavLink className="main-nav-logo" to="/" exact="true">
           <img class="main-nav-logo-image" src={Logo} alt="Argent Bank Logo" />
         </NavLink>
-        <NavLink className="main-nav-item" to="/sign-up">
+        <NavLink className="main-nav-item" to="/sign-in">
           <i class="fa fa-user-circle"></i>
           Sign In
         </NavLink>
