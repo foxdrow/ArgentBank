@@ -5,10 +5,10 @@ const MainContainer = (props) => {
   const { children, className } = props;
   return (
     <div className={className}>
-      <div className={"main-container"}>
+      {/* <div className={"main-container"}> */}
         <Header />
         {children}
-      </div>
+      {/* </div> */}
       <Footer />
     </div>
   );

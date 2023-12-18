@@ -8,7 +8,6 @@ import {
   signInSuccess,
   signInFailure,
   signInRemember,
-  signInOut,
 } from "./signInSlice";
 import axios from "axios";
 
@@ -38,6 +37,7 @@ const SignIn = () => {
 
       if (remember) {
         localStorage.setItem("token", response.data.body.token);
+        dispatch(signInRemember());
       } else {
         localStorage.removeItem("token");
       }
@@ -53,7 +53,6 @@ const SignIn = () => {
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
           <h1>Sign In</h1>
-          {/* {error && <Alert variant="danger">{error}</Alert>} */}
           <form onSubmit={handelSubmit}>
             <div className="input-wrapper">
               <label htmlFor="username">Username</label>
@@ -86,11 +85,6 @@ const SignIn = () => {
             <button type="submit" className="sign-in-button">
               Sign In
             </button>
-            {loading && (
-              <div className="spinner-border text-success mt-1" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-            )}
           </form>
         </section>
       </main>
