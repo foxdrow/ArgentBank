@@ -1,7 +1,7 @@
 import MainContainer from "../../layouts/MainContainer/MainContainer";
 import "./SignIn.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "./signInSlice";
 import {
   signInPending,
@@ -9,16 +9,25 @@ import {
   signInFailure,
   signInRemember,
 } from "./signInSlice";
+import { setUser } from "../../features/user/userSlice";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
+  const [auth, setAuth] = useState(false);
   const [remember, setRemember] = useState(false);
-  const { loading, auth, error } = useSelector((state) => state.signIn);
+  const { loading, error } = useSelector((state) => state.signIn);
+  useEffect(() => {
+    if (localStorage.token || sessionStorage.token) {
+      navigate("/user");
+    }
+  }, []);
 
   const handelChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -27,8 +36,6 @@ const SignIn = () => {
   const handelSubmit = async (e) => {
     e.preventDefault();
     dispatch(signInPending());
-    console.log(credentials);
-
     try {
       const response = await axios.post(
         "http://localhost:3001/api/v1/user/login",
@@ -36,12 +43,15 @@ const SignIn = () => {
       );
 
       if (remember) {
+        sessionStorage.setItem("token", response.data.body.token);
         localStorage.setItem("token", response.data.body.token);
         dispatch(signInRemember());
       } else {
         localStorage.removeItem("token");
+        sessionStorage.setItem("token", response.data.body.token);
       }
       dispatch(signInSuccess());
+      navigate("/user");
     } catch (err) {
       dispatch(signInFailure(err.message || err));
     }

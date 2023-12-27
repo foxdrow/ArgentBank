@@ -1,20 +1,25 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./Header.scss";
 import { useDispatch } from "react-redux";
 import { signInOut } from "../../pages/SignIn/signInSlice";
+import { useState, useEffect } from "react";
 
 import Logo from "../../assets/img/argentBankLogo.png";
 
 const Header = (props) => {
   const userId = useSelector((state) => state.user.id);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { auth } = useSelector((state) => state.signIn);
+  const [auth, setAuth] = useState(false);
+  useEffect(() => {
+    if (localStorage.token) {
+      setAuth(true);
+    }
+  }, []);
   const handleSignOut = () => {
     dispatch(signInOut());
     delete localStorage.token;
-    navigate("/");
+    delete sessionStorage.token;
   };
   return (
     <header>
@@ -24,12 +29,18 @@ const Header = (props) => {
           <img class="main-nav-logo-image" src={Logo} alt="Argent Bank Logo" />
         </NavLink>
         <div>
-          <NavLink className="main-nav-item" to="/sign-in">
-            <i class="fa fa-user-circle"></i>
-            Sign In
-          </NavLink>
+          {!auth && (
+            <NavLink className="main-nav-item" to="/sign-in">
+              <i class="fa fa-user-circle"></i>
+              Sign In
+            </NavLink>
+          )}
           {auth && (
-            <NavLink className="main-nav-item" onClick={() => handleSignOut()}>
+            <NavLink
+              className="main-nav-item"
+              onClick={() => handleSignOut()}
+              to="/"
+            >
               <i class="fa fa-sign-out"></i>
               Sign Out
             </NavLink>
