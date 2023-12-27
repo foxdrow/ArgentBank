@@ -4,6 +4,7 @@ import MainContainer from "../../layouts/MainContainer/MainContainer";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { setUserName } from "../../features/user/userSlice";
+import axios from "axios";
 
 const User = () => {
   const dispatch = useDispatch();
@@ -12,14 +13,14 @@ const User = () => {
   const { firstName, lastName, userName } = useSelector((state) => state.user);
   const navigate = useNavigate();
   useEffect(() => {
-    if (localStorage.token) {
+    if (localStorage.token || sessionStorage.token) {
       setAuth(true);
     } else {
       navigate("/sign-in");
     }
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (e.target.userName.value === "") {
       return;
@@ -27,6 +28,22 @@ const User = () => {
     const userName = e.target.userName.value;
     console.log(userName);
     dispatch(setUserName(userName));
+    const token = localStorage.token || sessionStorage.token;
+    try {
+      const response = await axios.put(
+        "http://localhost:3001/api/v1/user/profile",
+        {
+          userName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

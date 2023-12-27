@@ -12,15 +12,27 @@ const Header = (props) => {
   const { firstName, userName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
+  const [token, setToken] = useState(null);
   useEffect(() => {
     if (localStorage.token) {
       setAuth(true);
+      setToken(localStorage.token);
+    }
+    if (sessionStorage.token) {
+      setAuth(true);
+      setToken(sessionStorage.token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!token) {
+      return;
     }
     try {
       fetch("http://localhost:3001/api/v1/user/profile", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${localStorage.token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((res) => res.json())
@@ -37,7 +49,7 @@ const Header = (props) => {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [token]);
   const handleSignOut = () => {
     dispatch(signInOut());
     delete localStorage.token;
@@ -48,7 +60,11 @@ const Header = (props) => {
     <header>
       <nav className="main-nav">
         <NavLink className="main-nav-logo" to="/" exact="true">
-          <img className="main-nav-logo-image" src={Logo} alt="Argent Bank Logo" />
+          <img
+            className="main-nav-logo-image"
+            src={Logo}
+            alt="Argent Bank Logo"
+          />
         </NavLink>
         <div>
           {!auth && (
