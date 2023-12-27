@@ -3,36 +3,64 @@ import { useSelector } from "react-redux";
 import "./Header.scss";
 import { useDispatch } from "react-redux";
 import { signInOut } from "../../pages/SignIn/signInSlice";
+import { setUser } from "../../features/user/userSlice";
 import { useState, useEffect } from "react";
 
 import Logo from "../../assets/img/argentBankLogo.png";
 
 const Header = (props) => {
-  const userId = useSelector((state) => state.user.id);
+  const { firstName, userName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   useEffect(() => {
     if (localStorage.token) {
       setAuth(true);
     }
+    try {
+      fetch("http://localhost:3001/api/v1/user/profile", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(
+            setUser({
+              id: data.body.id,
+              firstName: data.body.firstName,
+              lastName: data.body.lastName,
+              userName: data.body.userName,
+            })
+          );
+        });
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
   const handleSignOut = () => {
     dispatch(signInOut());
     delete localStorage.token;
     delete sessionStorage.token;
+    setAuth(false);
   };
   return (
     <header>
-      {userId}
       <nav className="main-nav">
         <NavLink className="main-nav-logo" to="/" exact="true">
-          <img class="main-nav-logo-image" src={Logo} alt="Argent Bank Logo" />
+          <img className="main-nav-logo-image" src={Logo} alt="Argent Bank Logo" />
         </NavLink>
         <div>
           {!auth && (
             <NavLink className="main-nav-item" to="/sign-in">
-              <i class="fa fa-user-circle"></i>
+              <i className="fa fa-user-circle"></i>
               Sign In
+            </NavLink>
+          )}
+          {auth && (
+            <NavLink className="main-nav-item">
+              <i className="fa fa-user-circle"></i>
+              {userName}
             </NavLink>
           )}
           {auth && (
@@ -41,7 +69,7 @@ const Header = (props) => {
               onClick={() => handleSignOut()}
               to="/"
             >
-              <i class="fa fa-sign-out"></i>
+              <i className="fa fa-sign-out"></i>
               Sign Out
             </NavLink>
           )}
