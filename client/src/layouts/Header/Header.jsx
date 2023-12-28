@@ -74,7 +74,7 @@ const Header = (props) => {
             </NavLink>
           )}
           {auth && (
-            <NavLink className="main-nav-item">
+            <NavLink className="main-nav-item" to="/user">
               <i className="fa fa-user-circle"></i>
               {userName}
             </NavLink>

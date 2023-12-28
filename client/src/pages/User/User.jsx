@@ -9,7 +9,7 @@ import axios from "axios";
 const User = () => {
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
-  const [editMode, setEditMode] = useState(true);
+  const [editMode, setEditMode] = useState(false);
   const { firstName, lastName, userName } = useSelector((state) => state.user);
   const navigate = useNavigate();
   useEffect(() => {
