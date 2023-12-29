@@ -11,6 +11,8 @@ const Profile = () => {
   const [auth, setAuth] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const { firstName, lastName, userName } = useSelector((state) => state.user);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.token || sessionStorage.token) {
@@ -41,8 +43,9 @@ const Profile = () => {
         }
       );
       dispatch(setUserName(userName));
+      setSuccess(true);
     } catch (err) {
-      console.log(err);
+      setError(true);
     }
   };
 
@@ -117,6 +120,14 @@ const Profile = () => {
                   </button>
                 </div>
               </form>
+              {(error && (
+                <p className="error-message">An error has occurred</p>
+              )) ||
+                (success && (
+                  <p className="success-message">
+                    User name changed successfully
+                  </p>
+                ))}
             </div>
           )}
           <h2 className="sr-only">Accounts</h2>

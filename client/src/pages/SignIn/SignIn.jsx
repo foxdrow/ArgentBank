@@ -95,7 +95,7 @@ const SignIn = () => {
             </button>
           </form>
           {(loading && <p className="loading-message">Loading...</p>) ||
-            (error && <p className="error-message">{error}</p>) ||
+            (error && <p className="error-message">Username or password wrong</p>) ||
             (auth && <p className="success-message">Sign In Success</p>)}
         </section>
       </main>
