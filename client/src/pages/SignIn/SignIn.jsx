@@ -2,14 +2,12 @@ import MainContainer from "../../layouts/MainContainer/MainContainer";
 import "./SignIn.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { signIn } from "./signInSlice";
 import {
   signInPending,
   signInSuccess,
   signInFailure,
   signInRemember,
 } from "./signInSlice";
-import { setUser } from "../../features/user/userSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -20,14 +18,14 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const [auth, setAuth] = useState(false);
+  const [auth] = useState(false);
   const [remember, setRemember] = useState(false);
   const { loading, error } = useSelector((state) => state.signIn);
   useEffect(() => {
     if (localStorage.token || sessionStorage.token) {
       navigate("/user");
     }
-  }, []);
+  }, [navigate]);
 
   const handelChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./Header.scss";
 import { useDispatch } from "react-redux";
@@ -9,10 +9,11 @@ import { useState, useEffect } from "react";
 import Logo from "../../assets/img/argentBankLogo.png";
 
 const Header = (props) => {
-  const { firstName, userName } = useSelector((state) => state.user);
+  const { userName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   const [token, setToken] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     if (localStorage.token) {
       setAuth(true);
@@ -23,7 +24,6 @@ const Header = (props) => {
       setToken(sessionStorage.token);
     }
   }, []);
-
   useEffect(() => {
     if (!token) {
       return;
@@ -45,11 +45,26 @@ const Header = (props) => {
               userName: data.body.userName,
             })
           );
+        })
+        .catch((err) => {
+          console.log(err);
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          setAuth(false);
+          dispatch(
+            setUser({
+              id: null,
+              firstName: null,
+              lastName: null,
+              userName: null,
+            })
+          );
+          navigate("/sign-in");
         });
     } catch (err) {
       console.log(err);
     }
-  }, [token]);
+  }, [dispatch, navigate, token]);
   const handleSignOut = () => {
     dispatch(signInOut());
     delete localStorage.token;

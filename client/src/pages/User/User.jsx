@@ -18,7 +18,7 @@ const User = () => {
     } else {
       navigate("/sign-in");
     }
-  }, []);
+  }, [navigate]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ const User = () => {
     dispatch(setUserName(userName));
     const token = localStorage.token || sessionStorage.token;
     try {
-      const response = await axios.put(
+      await axios.put(
         "http://localhost:3001/api/v1/user/profile",
         {
           userName,
