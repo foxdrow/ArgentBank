@@ -1,4 +1,4 @@
-import "./User.scss";
+import "./Profile.scss";
 import { useDispatch, useSelector } from "react-redux";
 import MainContainer from "../../layouts/MainContainer/MainContainer";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { setUserName } from "../../features/user/userSlice";
 import axios from "axios";
 
-const User = () => {
+const Profile = () => {
   const dispatch = useDispatch();
   const [auth, setAuth] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -47,7 +47,7 @@ const User = () => {
   };
 
   return (
-    <MainContainer className="user">
+    <MainContainer className="profile">
       {auth && (
         <main className="main bg-dark">
           {!editMode && (
@@ -155,4 +155,4 @@ const User = () => {
     </MainContainer>
   );
 };
-export default User;
+export default Profile;

@@ -101,7 +101,7 @@ paths:
           description: Invalid Fields
         "500":
           description: Internal Server Error
-  /user/{userId}/accounts:
+  /users/{userId}/accounts:
     get:
       tags:
         - User Accounts
