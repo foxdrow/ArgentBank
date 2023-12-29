@@ -27,7 +27,6 @@ const User = () => {
     }
     const userName = e.target.userName.value;
     console.log(userName);
-    dispatch(setUserName(userName));
     const token = localStorage.token || sessionStorage.token;
     try {
       await axios.put(
@@ -41,6 +40,7 @@ const User = () => {
           },
         }
       );
+      dispatch(setUserName(userName));
     } catch (err) {
       console.log(err);
     }

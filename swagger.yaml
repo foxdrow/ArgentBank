@@ -101,11 +101,11 @@ paths:
           description: Invalid Fields
         "500":
           description: Internal Server Error
-  /user/accounts:
+  /user/{userId}/accounts:
     get:
       tags:
         - User Accounts
-      summary: User's Account
+      summary: User's Accounts
       description: API for getting all accounts
       parameters:
         - in: header
@@ -113,20 +113,23 @@ paths:
           description: Attach Bearer JWT token
           type: string
           required: true
+        - in: path
+          name: userId
+          description: User's ID
+          type: integer
+          required: true
       responses:
         "200":
           description: Accounts retrieved successully
           schema:
             $ref: "#/definitions/Accounts"
-        "400":
-          description: Invalid Fields
         "401":
           description: Unauthorized
         "404":
-          description: Accounts not found
+          description: User not found
         "500":
           description: Internal Server Error
-  /user/accounts/{accountId}:
+  /accounts/{accountId}:
     get:
       tags:
         - User Accounts
@@ -148,15 +151,15 @@ paths:
           description: Account retrieved successully
           schema:
             $ref: "#/definitions/Account"
-        "400":
-          description: Invalid Fields
         "401":
           description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Account not found
         "500":
           description: Internal Server Error
-  /user/accounts/{accountId}/transactions:
+  /accounts/{accountId}/transactions:
     get:
       tags:
         - User Transactions
@@ -178,15 +181,15 @@ paths:
           description: Transactions retrieved successully
           schema:
             $ref: "#/definitions/Transactions"
-        "400":
-          description: Invalid Fields
         "401":
           description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
-          description: Transactions not found
+          description: Account not found
         "500":
           description: Internal Server Error
-  /user/accounts/{accountId}/transactions/{transactionId}:
+  /transactions/{transactionId}:
     get:
       tags:
         - User Transactions
@@ -199,11 +202,6 @@ paths:
           type: string
           required: true
         - in: path
-          name: accountId
-          description: User's account ID
-          type: integer
-          required: true
-        - in: path
           name: transactionId
           description: Transaction's ID
           required: true
@@ -213,46 +211,41 @@ paths:
           description: Transaction retrieved successully
           schema:
             $ref: "#/definitions/Transaction"
-        "400":
-          description: Invalid Fields
         "401":
           description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Transaction not found
         "500":
           description: Internal Server Error
-  /user/accounts/{accountId}/transactions/{transactionsId}/update:
+  /transactions/{transactionsId}/update:
     patch:
       tags:
-      - User Transactions
+        - User Transactions
       summary: Update an existing transaction
       description: API for updating a transaction
       consumes:
-      - application/json
+        - application/json
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: header
-        name: Authorization
-        description: Attach Bearer JWT token
-        type: string
-        required: true
-      - in: path
-        name: accountId
-        description: User's account ID
-        type: integer
-        required: true
-      - in: path
-        name: transactionsId
-        description: Transaction's ID
-        required: true
-        type: integer
-      - in: body
-        name: body
-        required: true
-        description: Update transaction's informations
-        schema:
-            $ref: '#/definitions/TransactionsUpdate'
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          type: string
+          required: true
+        - in: path
+          name: transactionsId
+          description: Transaction's ID
+          required: true
+          type: integer
+        - in: body
+          name: body
+          required: true
+          description: Update transaction
+          schema:
+            $ref: "#/definitions/TransactionsUpdate"
       responses:
         "200":
           description: Transaction updated successully
@@ -262,10 +255,12 @@ paths:
           description: Invalid Fields
         "401":
           description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Transaction not found
         "500":
-          description: Internal Server Error 
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -323,62 +318,9 @@ definitions:
         type: string
   Accounts:
     properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
+      account_0:
         type: object
-        properties:
-          account_0:
-            type: object
-            description: First Account
-            properties:
-              id:
-                type: string
-              name:
-                type: string
-              number:
-                type: string
-              rib:
-                type: integer
-              iban:
-                type: string
-              amount:
-                type: number
-              description:
-                type: string
-              notes:
-                type: string
-          account_1:
-            type: object
-            description: Second Account
-            properties:
-              id:
-                type: string
-              name:
-                type: string
-              number:
-                type: string
-              rib:
-                type: integer
-              iban:
-                type: string
-              amount:
-                type: number
-              description:
-                type: string
-              notes:
-                type: string
-  Account:
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: object
-        description: Account
+        description: First Account
         properties:
           id:
             type: string
@@ -396,64 +338,49 @@ definitions:
             type: string
           notes:
             type: string
+      account_1:
+        type: object
+        description: Second Account
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          number:
+            type: string
+          rib:
+            type: integer
+          iban:
+            type: string
+          amount:
+            type: number
+          description:
+            type: string
+          notes:
+            type: string
+  Account:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        rib:
+          type: integer
+        iban:
+          type: string
+        amount:
+          type: number
+        description:
+          type: string
+        notes:
+          type: string
   Transactions:
     properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
+      transaction_0:
         type: object
-        properties:
-          transaction_0:
-            type: object
-            description: First transaction
-            properties:
-              id:
-                type: integer
-              date:
-                type: string
-              description:
-                type: string
-              amount:
-                type: number
-              currency:
-                type: string
-              type:
-                type: string
-              category:
-                type: string
-              notes:
-                type: string
-          transaction_1:
-            type: object
-            description: Second transaction
-            properties:
-              id:
-                type: integer
-              date:
-                type: string
-              description:
-                type: string
-              amount:
-                type: number
-              currency:
-                type: string
-              type:
-                type: string
-              category:
-                type: string
-              notes:
-                type: string
-  Transaction:
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: object
-        description: Transaction
+        description: First transaction
         properties:
           id:
             type: integer
@@ -471,6 +398,44 @@ definitions:
             type: string
           notes:
             type: string
+      transaction_1:
+        type: object
+        description: Second transaction
+        properties:
+          id:
+            type: integer
+          date:
+            type: string
+          description:
+            type: string
+          amount:
+            type: number
+          currency:
+            type: string
+          type:
+            type: string
+          category:
+            type: string
+          notes:
+            type: string
+  Transaction:
+    properties:
+      id:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      amount:
+        type: number
+      currency:
+        type: string
+      type:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
   TransactionsUpdate:
     type: object
     properties:
