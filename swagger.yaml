@@ -159,22 +159,17 @@ paths:
           description: Account not found
         "500":
           description: Internal Server Error
-  /accounts/{accountId}/transactions:
+  /accounts/transactions:
     get:
       tags:
         - User Transactions
       summary: Transactions
-      description: API for getting all transactions
+      description: API for getting all transactions for the current month, grouped by account
       parameters:
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
           type: string
-          required: true
-        - in: path
-          name: accountId
-          description: User's account ID
-          type: integer
           required: true
       responses:
         "200":
@@ -185,8 +180,6 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
-        "404":
-          description: Account not found
         "500":
           description: Internal Server Error
   /transactions/{transactionId}:
@@ -359,65 +352,109 @@ definitions:
           notes:
             type: string
   Account:
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        number:
-          type: string
-        rib:
-          type: integer
-        iban:
-          type: string
-        amount:
-          type: number
-        description:
-          type: string
-        notes:
-          type: string
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      number:
+        type: string
+      rib:
+        type: integer
+      iban:
+        type: string
+      amount:
+        type: number
+      description:
+        type: string
+      notes:
+        type: string
   Transactions:
     properties:
-      transaction_0:
-        type: object
-        description: First transaction
+      account_0:
         properties:
-          id:
-            type: integer
-          date:
-            type: string
-          description:
-            type: string
-          amount:
-            type: number
-          currency:
-            type: string
-          type:
-            type: string
-          category:
-            type: string
-          notes:
-            type: string
-      transaction_1:
-        type: object
-        description: Second transaction
+          transaction_0:
+            type: object
+            description: First transaction
+            properties:
+              id:
+                type: integer
+              date:
+                type: string
+              description:
+                type: string
+              amount:
+                type: number
+              currency:
+                type: string
+              type:
+                type: string
+              category:
+                type: string
+              notes:
+                type: string
+          transaction_1:
+            type: object
+            description: Second transaction
+            properties:
+              id:
+                type: integer
+              date:
+                type: string
+              description:
+                type: string
+              amount:
+                type: number
+              currency:
+                type: string
+              type:
+                type: string
+              category:
+                type: string
+              notes:
+                type: string
+      account_1:
         properties:
-          id:
-            type: integer
-          date:
-            type: string
-          description:
-            type: string
-          amount:
-            type: number
-          currency:
-            type: string
-          type:
-            type: string
-          category:
-            type: string
-          notes:
-            type: string
+          transaction_0:
+            type: object
+            description: First transaction
+            properties:
+              id:
+                type: integer
+              date:
+                type: string
+              description:
+                type: string
+              amount:
+                type: number
+              currency:
+                type: string
+              type:
+                type: string
+              category:
+                type: string
+              notes:
+                type: string
+          transaction_1:
+            type: object
+            description: Second transaction
+            properties:
+              id:
+                type: integer
+              date:
+                type: string
+              description:
+                type: string
+              amount:
+                type: number
+              currency:
+                type: string
+              type:
+                type: string
+              category:
+                type: string
+              notes:
+                type: string
   Transaction:
     properties:
       id:
